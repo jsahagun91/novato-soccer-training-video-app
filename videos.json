@@ -1,0 +1,16 @@
+{
+  "videos": [
+    {
+      "title": "Defensive Shape 4v2",
+      "desc": "Keeping Position",
+      "thumb": "https://novatosoccer.s3.us-east-1.amazonaws.com/Defensive+Shape+4v2+Keeping+Position-tmb.png",
+      "src": "https://novatosoccer.s3.us-east-1.amazonaws.com/Defensive+Shape+4v2+Keeping+Position-compress.mp4"
+    },
+    {
+      "title": "4v2 Blue Attacking ",
+      "desc": "Breakaways",
+      "thumb": "https://novatosoccer.s3.us-east-1.amazonaws.com/4v2-Blue-attacking-Breakaways-compress+.png",
+      "src": "https://novatosoccer.s3.us-east-1.amazonaws.com/4v2-Blue-attacking-Breakaways-compress.mp4"
+    }
+  ]
+}

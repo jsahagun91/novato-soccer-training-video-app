@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Novato Soccer Training</title>
+  <meta name="theme-color" content="#0ea5e9">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" href="icons/icon-192.png">
+  <style>
+    :root{
+      --nm-green:#7ED957; /* North Marin United green */
+      --bg:#000000;       /* page background */
+      --text:#ffffff;     /* global text */
+      --muted:#b8c7d1;    /* subtle text */
+      --card:#0b0f14;     /* dark card */
+      --brand:#7ED957;    /* accent */
+      --border:#7ED957;   /* accent border */
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial}
+    header{position:sticky;top:0;background:#000;border-bottom:4px solid var(--nm-green);padding:10px 16px}
+    .nav{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand img{height:36px;width:auto;display:block}
+    h1{margin:0;font-size:20px;letter-spacing:.5px}
+    main{max-width:960px;margin:0 auto;padding:16px}
+    .row{display:grid;grid-template-columns:160px 1fr;gap:12px;align-items:center;background:var(--card);border:2px solid var(--border);border-radius:14px;margin-bottom:12px;padding:10px}
+    .thumb{width:160px;height:90px;object-fit:cover;border-radius:10px;cursor:pointer;border:1px solid var(--border)}
+    .meta h3{margin:0 0 6px;font-size:18px;color:#fff}
+    .meta p{margin:0;color:var(--muted);font-size:13px}
+    .player{grid-column:1 / -1;width:100%;max-height:70vh;border-radius:10px;background:#000;display:none;border:1px solid var(--border)}
+    .play{border:2px solid var(--border);background:transparent;color:#ffffff;border-radius:10px;padding:8px 12px;margin-top:8px;cursor:pointer}
+    .play:hover{background:rgba(126,217,87,0.15)}
+    footer{color:#cfeecf;font-size:12px;text-align:center;margin-top:24px}
+    .error{background:#3b0c0c;color:#ffd7d7;border:1px solid #7f1d1d;padding:12px 14px;border-radius:12px}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="brand">
+        <img src="icons/nmu-logo.png" alt="North Marin United logo">
+        <h1>Novato Soccer Training Videos</h1>
+      </div>
+    </nav>
+  </header>
+  <main id="list" aria-live="polite">Loading…</main>
+    <footer>
+    Made with 💚 by <a href="https://pailabs.io" target="_blank" rel="noopener noreferrer" style="color:var(--brand);text-decoration:none;">pailabs.io</a>
+  </footer>
+  <script type="module">
+    (async () => {
+      const yrEl = document.getElementById('yr');
+      if (yrEl) yrEl.textContent = new Date().getFullYear();
+
+      const list = document.getElementById('list');
+      const showError = (msg) => {
+        list.innerHTML = `<div class="error" role="alert">${msg}</div>`;
+      };
+
+      const makeRow = (v) => {
+        const row = document.createElement('section');
+        row.className = 'row';
+        row.innerHTML = `
+          <img class="thumb" src="${v.thumb}" alt="${v.title} thumbnail" crossorigin="anonymous">
+          <div class="meta">
+            <h3>${v.title}</h3>
+            <p>${v.desc || ''}</p>
+            <button class="play">Play</button>
+          </div>
+          <video class="player" controls playsinline preload="metadata" poster="${v.thumb}" crossorigin="anonymous"></video>
+        `;
+
+        const img = row.querySelector('.thumb');
+        const btn = row.querySelector('.play');
+        const video = row.querySelector('.player');
+
+        const open = () => {
+          document.querySelectorAll('video.player').forEach(el => { if (el !== video) { el.pause(); el.style.display = 'none'; el.removeAttribute('src'); el.load(); } });
+          video.src = v.src;
+          video.style.display = 'block';
+          video.play().catch(() => {});
+        };
+
+        img.addEventListener('click', open);
+        btn.addEventListener('click', open);
+        img.addEventListener('error', () => showError(`Thumbnail failed to load: ${v.thumb}`));
+        video.addEventListener('error', () => showError(`Video failed to load/play: ${v.src}`));
+
+        return row;
+      };
+
+      try {
+        const res = await fetch('videos.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`videos.json request failed: ${res.status} ${res.statusText}`);
+        const data = await res.json();
+
+        if (!data || !Array.isArray(data.videos) || data.videos.length === 0) {
+          showError('No videos found in videos.json. Add items under a "videos" array.');
+        } else {
+          list.textContent = '';
+          data.videos.forEach(v => list.appendChild(makeRow(v)));
+        }
+      } catch (e) {
+        if (location.protocol === 'file:') {
+          showError('Cannot load videos.json when opened directly from the filesystem. Start a local server (e.g., `python3 -m http.server 5500`) or host the files.');
+        } else {
+          showError(`Failed to load videos: ${e.message}`);
+        }
+      }
+
+      if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+      }
+    })();
+  </script>
+</body>
+</html>
