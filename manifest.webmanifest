@@ -1,6 +1,6 @@
 {
   "name": "Novato Soccer Training",
-  "short_name": "NST",
+  "short_name": "Novato Soccer Training",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0b1220",
