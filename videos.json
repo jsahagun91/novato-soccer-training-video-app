@@ -7,10 +7,16 @@
       "src": "https://novatosoccer.s3.us-east-1.amazonaws.com/Defensive+Shape+4v2+Keeping+Position-compress.mp4"
     },
     {
-      "title": "4v2 Blue Attacking ",
+      "title": "4v2 Blue Attacking",
       "desc": "Breakaways",
       "thumb": "https://novatosoccer.s3.us-east-1.amazonaws.com/4v2-Blue-attacking-Breakaways-compress+.png",
       "src": "https://novatosoccer.s3.us-east-1.amazonaws.com/4v2-Blue-attacking-Breakaways-compress.mp4"
+    },
+    {
+      "title": "3v2+1 Switching the Play",
+      "desc": "Blues attacking scoring in mini goals",
+      "thumb": "https://novatosoccer.s3.us-east-1.amazonaws.com/3v2%2B1+switching+the+play-Blues+attacking+scoring+in+mini+goals..png",
+      "src": "https://novatosoccer.s3.us-east-1.amazonaws.com/3v2-plus-1-switching-the+play-Blues-attacking-scoring-in-mini-goals-compress.mp4"
     }
   ]
 }
