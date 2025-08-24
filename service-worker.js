@@ -1,4 +1,4 @@
-const CACHE='nst-rows-v1';const SHELL=['./','./index.html','./videos.json','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='nst-rows-v1-1';const SHELL=['./','./index.html','./videos.json','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)));self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>k!==CACHE?caches.delete(k):0))));self.clients.claim();});
 self.addEventListener('fetch',e=>{
